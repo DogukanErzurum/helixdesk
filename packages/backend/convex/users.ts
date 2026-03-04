@@ -5,39 +5,17 @@ export const getMany = query({
     args: {},
     handler: async (ctx) => {
         const users = await ctx.db.query("users").collect();
-        
         return users;
     },
 });
 
 export const add = mutation({
-    args: {
-      name: v.string(),
+    args: {},
+    handler: async (ctx) => {
+        const userId = await ctx.db.insert("users", {
+            name: "Dogukan",
+        });
+        return userId;
     },
-    handler: async (ctx, args) => {
-      const identity = await ctx.auth.getUserIdentity();
-  
-      if (!identity) {
-        throw new Error("Not authenticated");
-      }
-  
-      console.log({ identity });
-      const orgId = identity.organizationId;
-  
-      if (!orgId) {
-        throw new Error("No organization id");
-      }
-  
-      const userId = await ctx.db.insert("users", {
-        name: args.name,
-      });
-  
-      return userId;
-    },
-  });
-  
-  declare module "convex/server" {
-    interface UserIdentity {
-      organizationId?: string;
-    }
-  }
+});
+
