@@ -2,53 +2,80 @@
 
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenuItem,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarRail,
-  SidebarFooter,
-} from "@workspace/ui/components/sidebar";
-import {
-  CreditCard,
-  Inbox,
-  LayoutDashboard,
-  LibraryBig,
+  CreditCardIcon,
+  InboxIcon,
+  LayoutDashboardIcon,
+  LibraryBigIcon,
   Mic,
-  Palette,
+  PaletteIcon,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@workspace/ui/components/sidebar";
 import { cn } from "@workspace/ui/lib/utils";
 
 const customerSupportItems = [
-  { title: "Conversations", url: "/conversations", icon: Inbox },
-  { title: "Knowledge Base", url: "/files", icon: LibraryBig },
+  {
+    title: "Conversations",
+    url: "/conversations",
+    icon: InboxIcon,
+  },
+  {
+    title: "Knowledge Base",
+    url: "/files",
+    icon: LibraryBigIcon,
+  },
 ];
 
 const configurationItems = [
-  { title: "Widget Customization", url: "/customization", icon: Palette },
-  { title: "Integrations", url: "/integrations", icon: LayoutDashboard },
-  { title: "Voice Assistant", url: "/plugins/vapi", icon: Mic },
-];
-const accountItems = [
-  { title: "Plans & Billing", url: "/billing", icon: CreditCard },
+  {
+    title: "Widget Customization",
+    url: "/customization",
+    icon: PaletteIcon,
+  },
+  {
+    title: "Integrations",
+    url: "/integrations",
+    icon: LayoutDashboardIcon,
+  },
+  {
+    title: "Voice Assistant",
+    url: "/plugins/vapi",
+    icon: Mic,
+  },
 ];
 
-export function DashboardSidebar() {
+const accountItems = [
+  {
+    title: "Plans & Billing",
+    url: "/billing",
+    icon: CreditCardIcon,
+  },
+];
+
+export const DashboardSidebar = () => {
   const pathname = usePathname();
 
-  function isActive(path: string) {
-    if (path === "/") {
+  const isActive = (url: string) => {
+    if (url === "/") {
       return pathname === "/";
     }
-    return pathname === path;
-  }
+
+    return pathname.startsWith(url);
+  };
 
   return (
     <Sidebar className="group" collapsible="icon">
@@ -56,31 +83,27 @@ export function DashboardSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild size="lg">
-              <OrganizationSwitcher
-                hidePersonal
+              <OrganizationSwitcher 
+                hidePersonal 
                 skipInvitationScreen
                 appearance={{
                   elements: {
                     rootBox: "w-full! h-8!",
                     avatarBox: "size-4! rounded-sm!",
-                    organizationSwitcherTrigger: cn(
-                      "w-full! justify-start!",
-                      "group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!"
-                    ),
-                    organizationPreview:
-                      "group-data-[collapsible=icon]:justify-center! gap-2!",
-                    organizationPreviewText:
-                      "group-data-[collapsible=icon]:hidden! text-xs! font-medium! text-sidebar-foreground!",
-                    organizationSwitcherTriggerIcon:
-                      "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground!",
-                  },
+                    organizationSwitcherTrigger: "w-full! justify-start! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!",
+                    organizationPreview: "group-data-[collapsible=icon]:justify-center! gap-2!",
+                    organizationPreviewTextContainer: "group-data-[collapsible=icon]:hidden! text-xs! font-medium! text-sidebar-foreground!",
+                    organizationSwitcherTriggerIcon: "group-data-[collapsible=icon]:hidden! ml-auto! text-sidebar-foreground!"
+                  }
                 }}
               />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
+        {/* Customer Support */}
         <SidebarGroup>
           <SidebarGroupLabel>Customer Support</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -89,9 +112,11 @@ export function DashboardSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    tooltip={item.title}
                     isActive={isActive(item.url)}
-                    variant="gradient"
+                    className={cn(
+                      isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
+                    )}
+                    tooltip={item.title}
                   >
                     <Link href={item.url}>
                       <item.icon className="size-4" />
@@ -103,6 +128,8 @@ export function DashboardSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Configuration */}
         <SidebarGroup>
           <SidebarGroupLabel>Configuration</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -111,9 +138,11 @@ export function DashboardSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    tooltip={item.title}
                     isActive={isActive(item.url)}
-                    variant="gradient"
+                    className={cn(
+                      isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
+                    )}
+                    tooltip={item.title}
                   >
                     <Link href={item.url}>
                       <item.icon className="size-4" />
@@ -125,6 +154,8 @@ export function DashboardSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* Account */}
         <SidebarGroup>
           <SidebarGroupLabel>Account</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -133,9 +164,11 @@ export function DashboardSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    tooltip={item.title}
                     isActive={isActive(item.url)}
-                    variant="gradient"
+                    className={cn(
+                      isActive(item.url) && "bg-gradient-to-b from-sidebar-primary to-[#0b63f3]! text-sidebar-primary-foreground! hover:to-[#0b63f3]/90!"
+                    )}
+                    tooltip={item.title}
                   >
                     <Link href={item.url}>
                       <item.icon className="size-4" />
@@ -156,16 +189,11 @@ export function DashboardSidebar() {
               appearance={{
                 elements: {
                   rootBox: "w-full! h-8!",
-                  avatarBox: "size-4!",
-                  userButtonTrigger: cn(
-                    "w-full! p-2! hover:bg-sidebar-accent! hover:text-sidebar-accent-foreground!",
-                    "group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!"
-                  ),
-                  userButtonBox:
-                    "w-full! flex-row-reverse! justify-end! gap-2! group-data-[collapsible=icon]:justify-center! text-sidebar-foreground!",
-                  userButtonOuterIdentifier:
-                    "pl-0! group-data-[collapsible=icon]:hidden!",
-                },
+                  userButtonTrigger: "w-full! p-2! hover:bg-sidebar-accent! hover:text-sidebar-accent-foreground! group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!",
+                  userButtonBox: "w-full! flex-row-reverse! justify-end! gap-2! group-data-[collapsible=icon]:justify-center! text-sidebar-foreground!",
+                  userButtonOuterIdentifier: "pl-0! group-data-[collapsible=icon]:hidden!",
+                  avatarBox: "size-4!"
+                }
               }}
             />
           </SidebarMenuItem>
@@ -174,4 +202,4 @@ export function DashboardSidebar() {
       <SidebarRail />
     </Sidebar>
   );
-}
+};

@@ -1,6 +1,7 @@
-import { PremiumFeatureOverlay } from "@/modules/billing/ui/components/premium-feature-overlay";
-import { VapiView } from "@/modules/plugins/ui/views/vapi-view";
 import { Protect } from "@clerk/nextjs";
+
+import { PremiumFeatureOverlay } from "@/modules/billing/ui/components/premium-feature-overlay";
+import { CustomizationView } from "@/modules/customization/ui/views/customization-view";
 
 const Page = () => {
   return (
@@ -8,13 +9,13 @@ const Page = () => {
       condition={(has) => has({ plan: "pro" })}
       fallback={
         <PremiumFeatureOverlay>
-          <VapiView />
+          <CustomizationView />
         </PremiumFeatureOverlay>
       }
     >
-      <VapiView />
+      <CustomizationView />
     </Protect>
-  );
+  )
 };
  
 export default Page;

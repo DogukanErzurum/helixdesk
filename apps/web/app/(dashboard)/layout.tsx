@@ -1,3 +1,11 @@
 import { DashboardLayout } from "@/modules/dashboard/ui/layouts/dashboard-layout";
 
-export default DashboardLayout;
+const Layout = ({ children }: { children: React.ReactNode; }) => {
+  return ( 
+    <DashboardLayout>
+      {children}
+    </DashboardLayout>
+  );
+};
+ 
+export default Layout;
